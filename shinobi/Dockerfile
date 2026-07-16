@@ -34,14 +34,14 @@ RUN \
     && git -C /opt/shinobi reflog expire --expire=now --all \
     && git -C /opt/shinobi gc --prune=now --aggressive \
     && cd /opt/shinobi \
-    && yarn add mysql sqlite3 \
-    && yarn install \
+    && yarn add mysql sqlite3 --ignore-engines \
+    && yarn install --ignore-engines \
     && apk del --purge .build-dependencies
 
 # Copy root filesystem
 COPY rootfs /
 
-# Build arugments
+# Build arguments
 ARG BUILD_ARCH
 ARG BUILD_DATE
 ARG BUILD_REF
