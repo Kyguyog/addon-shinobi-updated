@@ -4,10 +4,9 @@ FROM $BUILD_FROM
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# 1. Install dependencies (Strictly pinned to v3.12 repositories)
-# We added a cache-busting comment to force Docker to ignore its old cached layer.
-# Cache-Buster: v3.12-clean-build-rebuild-force
+# 1. Install system-level dependencies strictly using Alpine 3.12 channels
 RUN \
+    # Cache-Buster: v3.12-pure-build-v1 \
     apk add --no-cache --virtual .build-dependencies \
         build-base \
         g++ \
@@ -42,10 +41,8 @@ RUN \
 # 2. Copy the root files (including the init scripts)
 COPY rootfs /
 
-# ==========================================
-# FORCE PERMISSIONS (Bypasses local/git permission caching)
-# ==========================================
-ENV LAST_FORCE_REBUILD="2026-07-16-v4"
+# Force permissions setup
+ENV LAST_FORCE_REBUILD="2026-07-16-v5"
 RUN chmod -R 755 /etc/cont-init.d/ /etc/services.d/ 2>/dev/null || true
 
 # Build arguments for Hass.io metadata
