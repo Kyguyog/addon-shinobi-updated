@@ -4,7 +4,7 @@ FROM $BUILD_FROM
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# 1. Install system-level dependencies first (cached safely)
+# 1. Install system-level dependencies (matching the host version)
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base \
@@ -16,13 +16,11 @@ RUN \
         python2-dev \
         git \
     && apk add --no-cache \
+        nodejs \
         npm \
         yarn \
         ffmpeg \
         mysql-client \
-        --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-        nodejs \
-    && apk add --no-cache \
         python2 \
         socat \
         sqlite \
@@ -43,10 +41,9 @@ RUN \
 COPY rootfs /
 
 # ==========================================
-# FORCE PERMISSIONS (Bypasses Windows/Samba caching)
+# FORCE PERMISSIONS (Bypasses local/git permission caching)
 # ==========================================
-# Changing the environment variable below forces Docker to bust its cache here
-ENV LAST_FORCE_REBUILD="2026-07-16-v2"
+ENV LAST_FORCE_REBUILD="2026-07-16-v3"
 RUN chmod -R 755 /etc/cont-init.d/ /etc/services.d/ 2>/dev/null || true
 
 # Build arguments for Hass.io metadata
