@@ -4,7 +4,9 @@ FROM $BUILD_FROM
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# 1. Install system-level dependencies (matching the host version)
+# 1. Install dependencies (Strictly pinned to v3.12 repositories)
+# We added a cache-busting comment to force Docker to ignore its old cached layer.
+# Cache-Buster: v3.12-clean-build-rebuild-force
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base \
@@ -43,7 +45,7 @@ COPY rootfs /
 # ==========================================
 # FORCE PERMISSIONS (Bypasses local/git permission caching)
 # ==========================================
-ENV LAST_FORCE_REBUILD="2026-07-16-v3"
+ENV LAST_FORCE_REBUILD="2026-07-16-v4"
 RUN chmod -R 755 /etc/cont-init.d/ /etc/services.d/ 2>/dev/null || true
 
 # Build arguments for Hass.io metadata
