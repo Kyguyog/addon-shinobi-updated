@@ -1,21 +1,13 @@
 ARG BUILD_FROM
-# For security and stability, we build from the Home Assistant base image
-# hadolint ignore=DL3006
 FROM $BUILD_FROM
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Copy root filesystem early so we can fix permissions
+# Copy root filesystem
 COPY rootfs /
 
-# 1. FIX SCRIPT PERMISSIONS: Make sure s6-overlay can execute the setup scripts
-RUN chmod +x -R /etc/cont-init.d/ 2>/dev/null || true \
-    && chmod +x -R /etc/services.d/ 2>/dev/null || true
-
-# 2. INSTALL DEPENDENCIES & SHINOBI CORE
-# We fetch nodejs from Alpine Edge to bypass the deprecated Node v12 engine error
-# hadolint ignore=DL3003,DL3016
+# Install dependencies and Shinobi
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base \
@@ -50,6 +42,12 @@ RUN \
     && yarn install --ignore-engines \
     && apk del --purge .build-dependencies
 
+# ==========================================
+# RUNTIME PERMISSION FIX
+# Forces scripts to be executable even if mounted over Samba/Windows
+# ==========================================
+ENTRYPOINT ["/bin/bash", "-c", "chmod +x -R /etc/cont-init.d/* /etc/services.d/*/* 2>/dev/null || true; exec /init"]
+
 # Build arguments for Hass.io metadata
 ARG BUILD_ARCH
 ARG BUILD_DATE
@@ -59,7 +57,6 @@ ARG BUILD_REF
 ARG BUILD_REPOSITORY
 ARG BUILD_VERSION
 
-# Label details
 LABEL \
     io.hass.name="${BUILD_NAME}" \
     io.hass.description="${BUILD_DESCRIPTION}" \
