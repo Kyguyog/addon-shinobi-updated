@@ -4,10 +4,7 @@ FROM $BUILD_FROM
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Copy root filesystem
-COPY rootfs /
-
-# Install dependencies and Shinobi
+# 1. Install system-level dependencies first (cached safely)
 RUN \
     apk add --no-cache --virtual .build-dependencies \
         build-base \
@@ -42,11 +39,15 @@ RUN \
     && yarn install --ignore-engines \
     && apk del --purge .build-dependencies
 
+# 2. Copy the root files (including the init scripts)
+COPY rootfs /
+
 # ==========================================
-# RUNTIME PERMISSION FIX
-# Forces scripts to be executable even if mounted over Samba/Windows
+# FORCE PERMISSIONS (Bypasses Windows/Samba caching)
 # ==========================================
-ENTRYPOINT ["/bin/bash", "-c", "chmod +x -R /etc/cont-init.d/* /etc/services.d/*/* 2>/dev/null || true; exec /init"]
+# Changing the environment variable below forces Docker to bust its cache here
+ENV LAST_FORCE_REBUILD="2026-07-16-v2"
+RUN chmod -R 755 /etc/cont-init.d/ /etc/services.d/ 2>/dev/null || true
 
 # Build arguments for Hass.io metadata
 ARG BUILD_ARCH
