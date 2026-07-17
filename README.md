@@ -7,10 +7,6 @@
 ![Project Maintenance][maintenance-shield]
 [![GitHub Activity][commits-shield]][commits]
 
-[![Discord][discord-shield]][discord]
-[![Community Forum][forum-shield]][forum]
-
-[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
 
 ![Shinobi screenhost](images/screenshot.jpg)
 
