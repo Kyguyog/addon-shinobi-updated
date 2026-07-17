@@ -54,22 +54,11 @@ Example add-on configuration:
 log_level: info
 super_username: admin@shinobi.video
 super_password: admin
-mysql: false
-mysql_host: core-mariadb
-mysql_username: shinobi_test
-mysql_password: sh1n0b1_test
-mysql_database: shinobi_test
-mysql_port: 3306
-mail_service: gmail
-mail_username: your_email@gmail.com
-mail_password: your_password
-mail_host: smtp.example.com
-mail_port: 587
-mail_secure: false
-mail_cert_verify: true
-ssl: false
-certfile: fullchain.pem
-keyfile: privkey.pem
+mysql_username: shinobi
+mysql_password: sh1n0b1
+mysql_database: shinobi
+mysql_root_password: rootpassword
+shinobi_update: false
 ```
 
 **Note**: _This is just an example, don't copy and past it! Create your own!_
@@ -103,105 +92,26 @@ and view system logs.
 
 The password for superuser of the superuser control panel.
 
-### Option: `mysql`
-
-By default, the add-on uses an internal SQLite database for its data.
-Set this option to `true` to enable MySQL as the database backend for this
-add-on. You'll need an external database server for this, like the
-MariaDB core add-on provided by Home Assistant.
-
-**Note**: _There is no migration system. When using SQLite at first, and
-switching to MySQL later on, would result in data loss._
-
-**Note**: _When using the core MariaDB add-on, please be sure to create a
-separate database and user for Shinobi. DO NOT use the same database as
-Home Assistant._
-
-### Option: `mysql_host`
-
-The hostname of the MySQL server to connect to. In case you are using the
-MariaDB core add-on, please use `core-mariadb` as the hostname.
-
 ### Option: `mysql_username`
 
-The username to use when connecting to a MySQL server.
+The username Shinobi uses when connecting to the local MariaDB server bundled
+inside this add-on container.
 
 ### Option: `mysql_password`
 
-The password to use when connecting to a MySQL server.
+The password Shinobi uses when connecting to the local MariaDB server.
 
 ### Option: `mysql_database`
 
-The MySQL database to store all Shinobi's data in.
+The local MariaDB database used to store Shinobi's data.
 
-**Note**: _DO NOT store Shinobi's data in the same database as Home Assistant!_
+### Option: `mysql_root_password`
 
-### Option: `mysql_port`
+The root password for the local MariaDB server bundled inside this add-on.
 
-The port the MySQL server is running on. Should be `3306` in most cases.
+### Option: `shinobi_update`
 
-### Option: `mail_service`
-
-The mail service to use. Can be either `smtp` or `gmail`.
-
-### Option: `mail_username`
-
-The username to use when connecting to the mail service.
-
-**Note**: _Please use your full mail address when using `gmail`._
-
-### Option: `mail_password`
-
-The password to use when connecting to the mail service.
-
-### Option: `mail_host`
-
-The `smtp` host or IP to connect to for sending emails.
-
-**Note**: _This option is ignored when using `gmail` as the mail service._
-
-### Option: `mail_port`
-
-The port the `smtp` host is listening on.
-
-**Note**: _This option is ignored when using `gmail` as the mail service._
-
-### Option: `mail_secure`
-
-If `true` the connection will use TLS when connecting to the server. If `false`
-(the default) then TLS is used if a server supports the STARTTLS extension.
-In most cases set this value to `true` if you are connecting to port 465.
-For port 587 or 25 keep it `false`.
-
-**Note**: _This option is ignored when using `gmail` as the mail service._
-
-### Option: `mail_cert_verify`
-
-Setting this to `false` would allow Shinobi to open a connection to
-TLS server with self-signed or invalid TLS certificate.
-
-**Note**: _This option is ignored when using `gmail` as the mail service._
-
-### Option: `ssl`
-
-Enables/Disables SSL (HTTPS) on the web interface of Shinobi. Set it `true` to
-enable it, `false` otherwise.
-
-**Note**: Enabling SSL would be additional to the already active plain HTTP
-server. HTTPS will be available on port `5443`, which, of course, can be changed
-in the Hass.io add-on configuration.
-
-### Option: `certfile`
-
-The certificate file to use for SSL.
-
-**Note**: _The file MUST be stored in `/ssl/`, which is default for Hass.io_
-
-### Option: `keyfile`
-
-The private key file to use for SSL.
-
-**Note**: _The file MUST be stored in `/ssl/`, which is default for Hass.io_
+Whether Shinobi should run a git update when the add-on starts.
 
 ## Shinobi configuration and user manuals
 
@@ -212,61 +122,6 @@ For more information about configuring Shinobi, please refer to the extensive
 documentation they offer:
 
 <https://shinobi.video/docs>
-
-## Setting up the MariaDB core add-on
-
-Setting up Shinobi to use MySQL can be a little complex for some users. So, let
-us give you some examples.
-
-First, install the core MariaDB add-on provided by Home Assistant (in case you
-didn't already have).
-
-Edit the add-on configuration of MariaDB. We need to do 3 things:
-
-1. Add a database for Shinobi
-1. Add a user for Shinobi
-1. Give the created user access to the created database.
-
-An example configuration would look like this:
-
-```yaml
-databases:
-  - homeassistant
-  - shinobi
-logins:
-  - username: homeassistant
-    password: PASSWORD
-  - username: shinobi
-    password: sh1n0b1
-rights:
-  - username: homeassistant
-    database: homeassistant
-  - username: shinobi
-    database: shinobi
-```
-
-After modifying your MariaDB add-on configuration, be sure to restart the
-MariaDB add-on.
-
-For the Shinobi add-on configuration, the defaults are matching the MariaDB
-example above. So, you'd only need to enable the `mysql` option by setting
-it to `true`.
-
-This is a part of the Shinobi add-on configuration that matches the above
-example:
-
-```yaml
-mysql: true
-mysql_host: core-mariadb
-mysql_username: shinobi_test
-mysql_password: sh1n0b1_test
-mysql_database: shinobi_test
-mysql_port: 3306
-```
-
-Save the configuration and restart the Shinobi add-on. The add-on will create
-all database internals (tables and structure) for you, the first time it
-connects.
 
 ## Embedding into Home Assistant
 

@@ -1,56 +1,30 @@
-# Install Shinobi with Docker
-#### 2024-05-07
-https://shinobi.video
-https://docs.shinobi.video/installation/docker
+# Shinobi Pro Home Assistant Add-on
 
-# Quick Install
+This folder is a Home Assistant add-on. Home Assistant Supervisor builds and runs it as one container total.
 
-1. Run this in terminal.
-```
-bash <(curl -s https://gitlab.com/Shinobi-Systems/Shinobi-Installer/raw/master/shinobi-docker.sh)
-```
+The container starts:
 
-# Advanced Install
+- Shinobi on port `8080`, exposed by Home Assistant as port `7440`.
+- A local MariaDB server for Shinobi, stored under `/data/mysql`.
+- Shinobi application files and configuration under `/data/shinobi`.
 
-1. Download this repository and enter it.
-    - If you **do not have Docker** installed run `sh INSTALL/docker.sh`.
-2. Review and modify the `docker-compose-main.yml` file.
-    - Leave it as-is for default setup.
-3. Run the preparation and starter script.
-    ```
-    bash setup_and_run.sh
-    ```
+## Configuration
 
-# Once Installed
+Most settings are configured from the Home Assistant add-on UI and stored in `/data/options.json`.
 
-The starter script builds and runs one Docker container total. That container runs Shinobi and its local MariaDB service together. Once complete open port 8080 of your Docker host in a web browser.
+| Option | Default |
+| --- | --- |
+| `log_level` | `info` |
+| `super_username` | `admin@shinobi.video` |
+| `super_password` | `admin` |
+| `mysql_username` | `shinobi` |
+| `mysql_password` | `sh1n0b1` |
+| `mysql_database` | `shinobi` |
+| `mysql_root_password` | `rootpassword` |
+| `shinobi_update` | `false` |
 
-> The following table offers a breakdown of the configurations that control how the `shinobi` service is set up. Adjustments can be made directly in `docker-compose-main.yml` to modify the behavior of the deployment as needed.
+After starting the add-on, open the web UI and go to `/super` to sign in as the superuser.
 
-### `docker-compose-main.yml` : `shinobi` Service Build Arguments and Environment Variables
+## Local Development
 
-#### Build Arguments
-
-| Argument          | Description                                               | Default Value |
-|-------------------|-----------------------------------------------------------|---------------|
-| SHINOBI_BRANCH    | The branch of the Shinobi git repository to clone during the build process. | `dev`         |
-
-#### Environment Variables
-
-| Variable          | Description                                          | Default Value |
-|-------------------|------------------------------------------------------|---------------|
-| HOME              | The home directory path within the container.        | `/home/Shinobi` |
-| DB_HOST           | Hostname of the local MariaDB server.                | `127.0.0.1`     |
-| DB_PORT           | Port of the local MariaDB server.                    | `3306`          |
-| DB_USER           | Username to connect to the local MariaDB database.   | `majesticflame` |
-| DB_PASSWORD       | Password to connect to the local MariaDB database.   | `1234`          |
-| DB_DATABASE       | Name of the local MariaDB database to use.           | `ccio`          |
-| MYSQL_ROOT_PASSWORD | Password for the local MariaDB root user.          | `rootpassword`  |
-| SHINOBI_UPDATE    | Whether to pull updates from git when the container starts. | `false`      |
-
-
-**Script Failing? Run this.**
-
-```
-apt install dos2unix -y && dos2unix entrypoint.sh && chmod +x entrypoint.sh && dos2unix setup_and_run.sh && chmod +x setup_and_run.sh && bash setup_and_run.sh
-```
+`setup_and_run.sh` and `docker-compose-main.yml` are only for local Docker testing outside Home Assistant. They still run one container total and persist data at `$HOME/ShinobiAddon`.
