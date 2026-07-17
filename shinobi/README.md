@@ -1,32 +1,63 @@
-# Community Hass.io Add-ons: Shinobi Pro
+# Install Shinobi with Docker
+#### 2024-05-07
+https://shinobi.video
+https://docs.shinobi.video/installation/docker
 
-[![Release][release-shield]][release] ![Project Stage][project-stage-shield] ![Project Maintenance][maintenance-shield]
+# Quick Install
 
-Beautiful and feature-rich CCTV/NVR for your camera's
+1. Run this in terminal.
+```
+bash <(curl -s https://gitlab.com/Shinobi-Systems/Shinobi-Installer/raw/master/shinobi-docker.sh)
+```
 
-## About
+# Advanced Install
 
-Shinobi is Open Source, written in Node.js, and real easy to use. It is the
-future of CCTV and NVR for developers and end-users alike. It is catered to
-by professionals and most importantly by the one who created it.
+1. Download this repository and enter it.
+    - If you **do not have Docker** installed run `sh INSTALL/docker.sh`.
+2. Review and modify the `docker-compose.yml` file.
+    - Leave it as-is for default setup.
+3. Run the preparation and starter script.
+    ```
+    bash setup_and_run.sh
+    ```
 
-Shinobi can be used as a Baby Monitor, Construction Site Montage Viewer,
-Store Camera DVR, and much more.
+# Once Installed
 
-You can use Shinobi Pro for personal use without a license in non-commercial
-locations, for educational, or simple testing. Schools, Colleges,
-and Universities do not require a subscription.
+You will be asked if you want to use the included database, default is Yes. Once complete open port 8080 of your Docker host in a web browser.
 
-![Terminal in the Home Assistant Frontend][screenshot]
+> The following tables offer a breakdown of the configurations that control how the `shinobi` and `shinobi-sql` services are set up and interact within your Docker environment. Adjustments can be made to these values directly in the associated `docker-compose` files to modify the behavior of the deployment as needed.
 
-[Click here for the full documentation][docs]
+### `docker-compose-sql.yml` : `shinobi-sql` Service Environment Variables
+
+| Variable             | Description                                          | Default Value    |
+|----------------------|------------------------------------------------------|------------------|
+| MYSQL_ROOT_PASSWORD  | The password for the MySQL root user.                | `rootpassword`   |
+| MYSQL_DATABASE       | The name of the database to create.                  | `ccio`           |
+| MYSQL_USER           | The username for the database.                       | `majesticflame`  |
+| MYSQL_PASSWORD       | The password for the database user.                  | `1234`           |
+
+### `docker-compose-main.yml` : `shinobi` Service Build Arguments and Environment Variables
+
+#### Build Arguments
+
+| Argument          | Description                                               | Default Value |
+|-------------------|-----------------------------------------------------------|---------------|
+| SHINOBI_BRANCH    | The branch of the Shinobi git repository to clone during the build process. | `dev`         |
+
+#### Environment Variables
+
+| Variable          | Description                                          | Default Value |
+|-------------------|------------------------------------------------------|---------------|
+| HOME              | The home directory path within the container.        | `/home/Shinobi` |
+| DB_HOST           | Hostname of the MySQL database server.               | `shinobi-sql`   |
+| DB_USER           | Username to connect to the MySQL database.           | `majesticflame` |
+| DB_PASSWORD       | Password to connect to the MySQL database.           | `1234`          |
+| DB_DATABASE       | Name of the MySQL database to use.                   | `ccio`          |
+| SHINOBI_UPDATE    | Whether to pull updates from git when the container starts. | `false`      |
 
 
-[docs]: https://github.com/roblandry/addon-shinobi/blob/v0.3.0b0/README.md
-[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
-[forum]: https://community.home-assistant.io/t/hass-addon-shinobi-revival/183349
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2020.svg
-[project-stage-shield]: https://img.shields.io/badge/project%20stage-beta-yellow.svg
-[release-shield]: https://img.shields.io/github/v/release/roblandry/addon-shinobi?include_prereleases
-[release]: https://github.com/roblandry/addon-shinobi/tree/v0.3.0b0
-[screenshot]: https://github.com/roblandry/addon-shinobi/raw/master/images/screenshot.jpg
+**Script Failing? Run this.**
+
+```
+apt install dos2unix -y && dos2unix entrypoint.sh && chmod +x entrypoint.sh && dos2unix setup_and_run.sh && chmod +x setup_and_run.sh && bash setup_and_run.sh
+```
