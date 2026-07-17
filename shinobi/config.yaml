@@ -1,5 +1,5 @@
 name: "Shinobi Pro"
-version: "1.0.0"
+version: "1.0.1"
 slug: "shinobi"
 description: "Shinobi CCTV/NVR with a local MariaDB database in the same add-on container"
 url: "https://github.com/Kyguyog/addon-shinobi-updated"

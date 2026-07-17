@@ -1,5 +1,5 @@
-ARG BASE_IMAGE=node:22-bookworm-slim
-FROM ${BASE_IMAGE}
+ARG BUILD_FROM=node:22-bookworm-slim
+FROM ${BUILD_FROM}
 
 ENV DEBIAN_FRONTEND=noninteractive
 

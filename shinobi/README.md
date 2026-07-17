@@ -28,3 +28,7 @@ After starting the add-on, open the web UI and go to `/super` to sign in as the 
 ## Local Development
 
 `setup_and_run.sh` and `docker-compose-main.yml` are only for local Docker testing outside Home Assistant. They still run one container total and persist data at `$HOME/ShinobiAddon`.
+
+## Troubleshooting
+
+If the add-on log still mentions `s6-overlay-suexec`, `/etc/cont-init.d`, or `Permission denied` for scripts like `10-requirements.sh`, Home Assistant is still running an old cached image. Reload the add-on repository, update/rebuild the add-on, and if the old log remains, uninstall and reinstall the add-on so Supervisor builds version `1.0.1` or newer.
