@@ -14,7 +14,7 @@ bash <(curl -s https://gitlab.com/Shinobi-Systems/Shinobi-Installer/raw/master/s
 
 1. Download this repository and enter it.
     - If you **do not have Docker** installed run `sh INSTALL/docker.sh`.
-2. Review and modify the `docker-compose.yml` file.
+2. Review and modify the `docker-compose-main.yml` file.
     - Leave it as-is for default setup.
 3. Run the preparation and starter script.
     ```
@@ -23,18 +23,9 @@ bash <(curl -s https://gitlab.com/Shinobi-Systems/Shinobi-Installer/raw/master/s
 
 # Once Installed
 
-You will be asked if you want to use the included database, default is Yes. Once complete open port 8080 of your Docker host in a web browser.
+The starter script builds and runs one Docker container total. That container runs Shinobi and its local MariaDB service together. Once complete open port 8080 of your Docker host in a web browser.
 
-> The following tables offer a breakdown of the configurations that control how the `shinobi` and `shinobi-sql` services are set up and interact within your Docker environment. Adjustments can be made to these values directly in the associated `docker-compose` files to modify the behavior of the deployment as needed.
-
-### `docker-compose-sql.yml` : `shinobi-sql` Service Environment Variables
-
-| Variable             | Description                                          | Default Value    |
-|----------------------|------------------------------------------------------|------------------|
-| MYSQL_ROOT_PASSWORD  | The password for the MySQL root user.                | `rootpassword`   |
-| MYSQL_DATABASE       | The name of the database to create.                  | `ccio`           |
-| MYSQL_USER           | The username for the database.                       | `majesticflame`  |
-| MYSQL_PASSWORD       | The password for the database user.                  | `1234`           |
+> The following table offers a breakdown of the configurations that control how the `shinobi` service is set up. Adjustments can be made directly in `docker-compose-main.yml` to modify the behavior of the deployment as needed.
 
 ### `docker-compose-main.yml` : `shinobi` Service Build Arguments and Environment Variables
 
@@ -49,10 +40,12 @@ You will be asked if you want to use the included database, default is Yes. Once
 | Variable          | Description                                          | Default Value |
 |-------------------|------------------------------------------------------|---------------|
 | HOME              | The home directory path within the container.        | `/home/Shinobi` |
-| DB_HOST           | Hostname of the MySQL database server.               | `shinobi-sql`   |
-| DB_USER           | Username to connect to the MySQL database.           | `majesticflame` |
-| DB_PASSWORD       | Password to connect to the MySQL database.           | `1234`          |
-| DB_DATABASE       | Name of the MySQL database to use.                   | `ccio`          |
+| DB_HOST           | Hostname of the local MariaDB server.                | `127.0.0.1`     |
+| DB_PORT           | Port of the local MariaDB server.                    | `3306`          |
+| DB_USER           | Username to connect to the local MariaDB database.   | `majesticflame` |
+| DB_PASSWORD       | Password to connect to the local MariaDB database.   | `1234`          |
+| DB_DATABASE       | Name of the local MariaDB database to use.           | `ccio`          |
+| MYSQL_ROOT_PASSWORD | Password for the local MariaDB root user.          | `rootpassword`  |
 | SHINOBI_UPDATE    | Whether to pull updates from git when the container starts. | `false`      |
 
 

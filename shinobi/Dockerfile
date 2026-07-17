@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     ffmpeg \
-    default-mysql-client \
+    default-mysql-server \
     procps \
     && rm -rf /var/lib/apt/lists/*  # Clean up to reduce image size
 
@@ -25,5 +25,6 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 8080
+VOLUME ["/home/Shinobi", "/var/lib/mysql"]
 
 ENTRYPOINT ["/entrypoint.sh"]

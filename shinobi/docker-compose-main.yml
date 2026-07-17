@@ -8,13 +8,16 @@ services:
     volumes:
       - /dev/shm/ShinobiRAM:/dev/shm/streams
       - $HOME/Shinobi:/home/Shinobi
+      - $HOME/ShinobiSQL:/var/lib/mysql
     ports:
       - "8080:8080"
     environment:
       - HOME=/home/Shinobi
-      - DB_HOST=shinobi-sql
+      - DB_HOST=127.0.0.1
+      - DB_PORT=3306
       - DB_USER=majesticflame
       - DB_PASSWORD=1234
       - DB_DATABASE=ccio
+      - MYSQL_ROOT_PASSWORD=rootpassword
       - SHINOBI_UPDATE=false
     restart: unless-stopped
