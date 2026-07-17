@@ -2,10 +2,6 @@
 
 [![Release][release-shield]][release] ![Project Stage][project-stage-shield] ![Project Maintenance][maintenance-shield]
 
-[![Discord][discord-shield]][discord] [![Community Forum][forum-shield]][forum]
-
-[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
-
 Beautiful and feature-rich CCTV/NVR for your camera's
 
 ## About
@@ -25,10 +21,7 @@ and Universities do not require a subscription.
 
 [Click here for the full documentation][docs]
 
-[buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-2.svg
-[buymeacoffee]: https://www.buymeacoffee.com/roblandry
-[discord-shield]: https://img.shields.io/discord/330944238910963714.svg
-[discord]: http://discordapp.com/users/378376356108435457
+
 [docs]: https://github.com/roblandry/addon-shinobi/blob/v0.3.0b0/README.md
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
 [forum]: https://community.home-assistant.io/t/hass-addon-shinobi-revival/183349
